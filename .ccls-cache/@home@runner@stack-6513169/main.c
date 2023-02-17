@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
   NodePtr top = NULL;
   int i, j, N = 0;
   Stack s;
+  char x;
   s.top = NULL;
   s.size = 0;
   for (i = 1; i < argc; i++) {
@@ -20,16 +21,18 @@ int main(int argc, char *argv[]) {
         push(&s, (argv[i][j]));
         break;
       case '}':
-        if (pop(&s) != '{') {
-          if(pop(&s) == '[')
+        x=pop(&s);
+        if (x != '{') {
+          if(x == '[')
           N = 1;
           else
           N=2;}
 
         break;
       case ']':
-       if (pop(&s) != '[') {
-          if(pop(&s) == '{')
+        x=pop(&s);
+       if (x != '[') {
+          if(x == '{')
           N = 1;
           else
           N=2;}
@@ -41,6 +44,7 @@ int main(int argc, char *argv[]) {
       if (N == 1)
         break;
     }
+   
     if (s.size > 0) {
       printf("argv %d: Incorrect too many open parathesis\n", i);
       pop_all(&s);
