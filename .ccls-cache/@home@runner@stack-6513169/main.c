@@ -4,19 +4,54 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main(int argc, char * argv[]) {
-     NodePtr top = NULL;
-    int i;
+int main(int argc, char *argv[]) {
+  NodePtr top = NULL;
+  int i, j, N = 0;
   Stack s;
-  s.top=NULL;
-  s.size=0;
-    for(i=1;i<argc;i++){
-      push(&s,atoi(argv[i]));
-     
-    }
- pop_all(&s);
-  
+  s.top = NULL;
+  s.size = 0;
+  for (i = 1; i < argc; i++) {
+    N=0;
+    for (j = 0; j < strlen(argv[i]); j++) {
 
+      switch (argv[i][j]) {
+      case '{':
+      case '[':
+        push(&s, (argv[i][j]));
+        break;
+      case '}':
+        if (pop(&s) != '{') {
+          if(pop(&s) == '[')
+          N = 1;
+          else
+          N=2;}
+
+        break;
+      case ']':
+       if (pop(&s) != '[') {
+          if(pop(&s) == '{')
+          N = 1;
+          else
+          N=2;}
+        else N=0;
+        break;
+      default:
+        printf("Non of condition\n");
+      }
+      if (N == 1)
+        break;
+    }
+    if (s.size > 0) {
+      printf("argv %d: Incorrect too many open parathesis\n", i);
+      pop_all(&s);
+    } else if (N == 0)
+      printf("argv %d: Correct\n", i);
+    else if (N == 1)
+      printf("argv %d: Incorrect mismatch \n", i);
+    else
+      printf("argv %d: Incorrect too many close parathesis\n", i);
+      pop_all(&s);
+  }
 
   // pop(&top);
 
@@ -31,8 +66,8 @@ int main(int argc, char * argv[]) {
   /*}
 
 
-}
-*/
+  }
+  */
 
   return 0;
 }
